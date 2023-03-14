@@ -1,6 +1,6 @@
-import { ArticlesTraffic } from "../types";
+import { ArticlesTraffic } from "../types/article";
 
-const dbSample: ArticlesTraffic = {
+const testDataset: ArticlesTraffic = {
   traffic_data: [
     {
       id: "f1cbfdfd-006f-4d77-9fbb-913758170a49",
@@ -75,4 +75,4 @@ const dbSample: ArticlesTraffic = {
   ]
 }
 
-export default dbSample;
+export default testDataset;

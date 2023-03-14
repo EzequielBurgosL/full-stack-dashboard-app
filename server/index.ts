@@ -1,9 +1,9 @@
-import express, { Application } from 'express'
-
-const app: Application = express();
+import app from './app';
 
 const port: number = 3001;
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App is listening on port ${port} !`)
 });
+
+export default server;

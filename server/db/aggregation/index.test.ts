@@ -1,4 +1,4 @@
-import mockData from '../fixtures/db-sample';
+import mockData from '../../fixtures/test-dataset';
 import { totalMonthTrafficPerHour, monthTrafficPerHour } from '.';
 
 describe("monthTrafficPerHour", () => {

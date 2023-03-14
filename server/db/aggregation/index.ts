@@ -1,4 +1,4 @@
-import { MonthTraffic, Article } from "../types";
+import { MonthTraffic, Article } from "../../types/article";
 
 type TotalMonthTraffic = {
   hour: number;
