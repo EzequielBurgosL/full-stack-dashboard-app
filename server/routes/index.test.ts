@@ -9,42 +9,19 @@ describe('GET /api/articles/:id/:timeRange', () => {
   });
 
   it('SHOULD return a 200 response and the correct article data', async () => {
-    jest.spyOn(database, 'findOneByTimeRange').mockReturnValue({
+    const expectedResponse = {
       id: "f1cbfdfd-006f-4d77-9fbb-913758170a49",
       url: "https://www.example.com/article1",
       author: "John",
       image_url: "https://picsum.photos/600/400?buster=0.19513832527942854",
       timeRange: 'today',
-      data: [
-        {
-          label: 'hour 0',
-          traffic: 10
-        },
-        {
-          label: 'hour 1',
-          traffic: 20
-        },
-      ],
-    });
+      labels: ['hour 0', 'hour 1'],
+      data: [10, 20]
+    };
+    jest.spyOn(database, 'findOneByTimeRange').mockReturnValue(expectedResponse);
     const response = await request(app).get('/api/articles/1/today');
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual({
-      id: "f1cbfdfd-006f-4d77-9fbb-913758170a49",
-      url: "https://www.example.com/article1",
-      author: "John",
-      image_url: "https://picsum.photos/600/400?buster=0.19513832527942854",
-      timeRange: 'today',
-      data: [
-        {
-          label: 'hour 0',
-          traffic: 10
-        },
-        {
-          label: 'hour 1',
-          traffic: 20
-        },
-      ],
-    });
+    expect(response.body).toEqual(expectedResponse);
   });
 
   it('SHOULD return a 404 response when the article is not found', async () => {

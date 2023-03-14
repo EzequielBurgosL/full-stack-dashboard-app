@@ -1,4 +1,4 @@
-import { buildLabels, getTodayDailyTraffic, getYesterdayDailyTraffic } from ".";
+import { getTodayDailyTraffic, getYesterdayDailyTraffic } from ".";
 import testDataset from "../../fixtures/test-dataset";
 import * as dateUtils from "../../utils/dates";
 
