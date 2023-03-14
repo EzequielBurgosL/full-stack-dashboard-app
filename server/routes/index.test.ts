@@ -14,7 +14,7 @@ describe('GET /api/articles/:id/:timeRange', () => {
       url: "https://www.example.com/article1",
       author: "John",
       image_url: "https://picsum.photos/600/400?buster=0.19513832527942854",
-      timeFrame: 'today',
+      timeRange: 'today',
       data: [
         {
           label: 'hour 0',
@@ -28,13 +28,12 @@ describe('GET /api/articles/:id/:timeRange', () => {
     });
     const response = await request(app).get('/api/articles/1/today');
     expect(response.statusCode).toBe(200);
-    console.log('response.body: ', response.body);
     expect(response.body).toEqual({
       id: "f1cbfdfd-006f-4d77-9fbb-913758170a49",
       url: "https://www.example.com/article1",
       author: "John",
       image_url: "https://picsum.photos/600/400?buster=0.19513832527942854",
-      timeFrame: 'today',
+      timeRange: 'today',
       data: [
         {
           label: 'hour 0',

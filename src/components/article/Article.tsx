@@ -21,7 +21,7 @@ export type ArticleProps = {
 
 export const Article = ({ author, url, image, traffic }: ArticleProps) => {
   return (
-    <Card sx={{ display: 'flex', mb: 1, paddingRight: '6px' }} variant='outlined'>
+    <Card sx={{ display: 'flex', mb: 1, paddingRight: '6px', boxShadow: 'rgb(0 0 0 / 20%) 1px 1px 2px' }} variant='outlined'>
       <CardMedia
         component="img"
         sx={{ width: 151 }}

@@ -1,14 +1,15 @@
 import dataset from "../dataset.json";
 import testDataset from "../fixtures/test-dataset";
-import { Article } from "../types/article";
+import { Article, DayTraffic } from "../types/article";
 import { TimeRange } from "../types/timeRange";
-import { getTodayDayNumber, getYesterdayDayNumber } from "../utils/dates";
+import { getTodayDailyTraffic, getYesterdayDailyTraffic } from "./helpers";
 
 const _dataset = process.env.NODE_ENV === 'test' ? testDataset : dataset;
 
 type ProcessedArticle = Partial<Article> & {
-  data?: any;
-  timeFrame?: string; 
+  timeRange?: string;
+  data?: number[];
+  labels?: string[];
 }
 
 class Database {
@@ -19,37 +20,33 @@ class Database {
 
     if (!article) return null;
 
-    if (timeRange === TimeRange.TODAY) {
-      // @ts-ignore
-      return Database.getTodayDailyTraffic(article);
-    } else if (timeRange === TimeRange.YESTERDAY) {
-      // @ts-ignore
-      return Database.getYesterdayDailyTraffic(article);
+    let data: number[] | undefined;
+    let labels: string[] | undefined;
+
+    if (timeRange === TimeRange.YESTERDAY) {
+      const dayTraffic = getYesterdayDailyTraffic(article.daily_traffic);
+
+      // data = dayTraffic?.hourly_traffic;
     } else if (timeRange === TimeRange.WEEK) {
       return article;
     } else if (timeRange === TimeRange.MONTH) {
       return article;
+    } else {
+      const dayTraffic: DayTraffic | undefined = getTodayDailyTraffic(article.daily_traffic);
+
+      labels = dayTraffic?.hourly_traffic.map(item => `${item.hour}`.padStart(2, '0'));
+      data = dayTraffic?.hourly_traffic.map(item => item.traffic);
     }
 
-    return article;
-  }
-
-  static getTodayDailyTraffic(article: Article) {
-    const currentDayNumber = getTodayDayNumber();
-    const hourTraffic = article.daily_traffic.find((dayTraffic) => {
-      return dayTraffic.day === currentDayNumber;
-    });
-
-    return hourTraffic;
-  }
-
-  static getYesterdayDailyTraffic(article: Article) {
-    const currentDayNumber = getYesterdayDayNumber();
-    const hourTraffic = article.daily_traffic.find((dayTraffic) => {
-      return dayTraffic.day === currentDayNumber;
-    });
-
-    return hourTraffic;
+    return {
+      id: article.id,
+      url: article.url,
+      author: article.author,
+      image_url: article.image_url,
+      timeRange: timeRange,
+      data: data,
+      labels: labels
+    };
   }
 }
 

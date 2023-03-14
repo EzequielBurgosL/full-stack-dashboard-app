@@ -11,8 +11,10 @@ export const BaseLayout = ({ children }: PropsWithChildren<{}>) => {
           sx={{
             flexGrow: 1,
             height: '100vh',
-            overflow: 'auto',
-            marginTop: '64px'
+            // overflow: 'auto',
+            marginTop: '64px',
+            maxWidth: '1200px',
+            margin: '64px auto'
           }}
         >
           { children }
