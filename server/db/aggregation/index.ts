@@ -2,10 +2,10 @@ import { MonthTraffic, Article } from "../../types/article";
 
 type TotalMonthTraffic = {
   hour: number;
-  totalTraffic: number;
+  traffic: number;
 }[];
 
-export const monthTrafficPerHour = (monthTraffic: MonthTraffic): TotalMonthTraffic => {
+export function getArticleMonthTrafficPerHour(monthTraffic: MonthTraffic): TotalMonthTraffic {
   const totalTraffic: { [hour: number]: number } = {};
 
   monthTraffic.forEach((dayTraffic) => {
@@ -26,16 +26,16 @@ export const monthTrafficPerHour = (monthTraffic: MonthTraffic): TotalMonthTraff
 
     return ({
       hour: hour,
-      totalTraffic: totalTraffic[hour]
+      traffic: totalTraffic[hour]
     })
   });
 }
 
-export const totalMonthTrafficPerHour = (articles: Article[]) => {
+export function totalArticlesMonthTrafficPerHour(articles: Article[]) {
   let result: TotalMonthTraffic = [];
 
   articles.forEach((article) => {
-    const totalMonthArticle = monthTrafficPerHour(article.daily_traffic);
+    const totalMonthArticle = getArticleMonthTrafficPerHour(article.daily_traffic);
 
     if (!result.length) {
       result = totalMonthArticle;
@@ -43,7 +43,7 @@ export const totalMonthTrafficPerHour = (articles: Article[]) => {
     }
 
     totalMonthArticle.forEach((totalDay, index) => {
-      result[index].totalTraffic += totalDay.totalTraffic;
+      result[index].traffic += totalDay.traffic;
     });
   });
 

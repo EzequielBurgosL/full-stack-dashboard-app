@@ -8,7 +8,7 @@ describe('GET /api/articles/:id/:timeRange', () => {
     server.close();
   });
 
-  it('SHOULD return a 200 response and the correct article data', async () => {
+  it('should return a 200 response and the correct article data', async () => {
     const expectedResponse = {
       id: "f1cbfdfd-006f-4d77-9fbb-913758170a49",
       url: "https://www.example.com/article1",
@@ -24,14 +24,14 @@ describe('GET /api/articles/:id/:timeRange', () => {
     expect(response.body).toEqual(expectedResponse);
   });
 
-  it('SHOULD return a 404 response when the article is not found', async () => {
+  it('should return a 404 response when the article is not found', async () => {
     // Mock the database findOneByTimeRange method to return null
     jest.spyOn(database, 'findOneByTimeRange').mockReturnValue(null);
     const response = await request(app).get('/api/articles/1/today');
     expect(response.statusCode).toBe(404);
   });
 
-  it('SHOULD return a 500 response when an error occurs', async () => {
+  it('should return a 500 response when an error occurs', async () => {
     // Mock the database findOneByTimeRange method to throw an error
     jest.spyOn(database, 'findOneByTimeRange').mockImplementation(() => {
       throw new Error('Database error');

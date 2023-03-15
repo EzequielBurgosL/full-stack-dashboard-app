@@ -1,8 +1,9 @@
 import devDataset from "../dataset.json";
 import testDataset from "../fixtures/test-dataset";
-import { Article, DayTraffic } from "../types/article";
+import { Article } from "../types/article";
 import { TimeRange } from "../types/timeRange";
-import { getTodayDailyTraffic, getYesterdayDailyTraffic } from "./helpers";
+import { getArticleMonthTrafficPerHour } from "./aggregation";
+import { getTodayTrafficPerHour, getYesterdayTrafficPerHour } from "./helpers";
 
 const localDataset = process.env.NODE_ENV === 'test' ? testDataset : devDataset;
 
@@ -10,57 +11,52 @@ type ProcessedArticle = Partial<Article> & {
   timeRange?: string;
   data?: number[];
   labels?: string[];
+  totalTraffic?: number;
 }
 
 class Database {
   private trafficData: Article[] = localDataset.traffic_data;
 
   findOneByTimeRange(id: number, timeRange: string): ProcessedArticle | null {
-    if(!id || typeof id !== 'number' || id < 0) {
-      console.error('wrong id, received: ', id);
-
+    if (!id || typeof id !== 'number' || id < 0) {
+      console.log('wrong id, received: ', id);
       return null;
     }
 
     const article = this.trafficData[id - 1];
 
     if (!article) {
-      console.error('article was not found');
-
+      console.log('article was not found');
       return null;
     }
 
     let data: number[] | undefined;
     let labels: string[] | undefined;
+    let traffic;
 
     if (timeRange === TimeRange.YESTERDAY) {
-      const dayTraffic: DayTraffic | undefined = getYesterdayDailyTraffic(
-        article.daily_traffic
-      );
-
-      labels = dayTraffic?.hourly_traffic.map(item => `${item.hour}`.padStart(2, '0'));
-      data = dayTraffic?.hourly_traffic.map(item => item.traffic);
+      traffic = getYesterdayTrafficPerHour(article.daily_traffic);
     } else if (timeRange === TimeRange.WEEK) {
       return article;
     } else if (timeRange === TimeRange.MONTH) {
-      return article;
+      traffic = getArticleMonthTrafficPerHour(article.daily_traffic);
     } else {
-      const dayTraffic: DayTraffic | undefined = getTodayDailyTraffic(
-        article.daily_traffic
-      );
-
-      labels = dayTraffic?.hourly_traffic.map(item => `${item.hour}`.padStart(2, '0'));
-      data = dayTraffic?.hourly_traffic.map(item => item.traffic);
+      traffic = getTodayTrafficPerHour(article.daily_traffic);
     }
+
+    labels = traffic?.map(item => `${item.hour}`.padStart(2, '0'));
+    data = traffic?.map(item => item.traffic);
+    const totalTraffic = traffic?.reduce((prev, curr) => prev += curr.traffic, 0);
 
     return {
       id: article.id,
       url: article.url,
       author: article.author,
       image_url: article.image_url,
-      timeRange: timeRange,
-      data: data,
-      labels: labels
+      timeRange,
+      data,
+      labels,
+      totalTraffic
     };
   }
 }
