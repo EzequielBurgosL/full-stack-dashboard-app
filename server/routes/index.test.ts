@@ -2,6 +2,7 @@ import request from 'supertest';
 import database from '../db';
 import app from '../app';
 import server from '../index';
+import { TimeRange } from '../types/timeRange';
 
 describe('GET /api/articles/:id/:timeRange', () => {
   afterAll(() => {
@@ -14,12 +15,12 @@ describe('GET /api/articles/:id/:timeRange', () => {
       url: "https://www.example.com/article1",
       author: "John",
       image_url: "https://picsum.photos/600/400?buster=0.19513832527942854",
-      timeRange: 'today',
+      timeRange: TimeRange.TODAY,
       labels: ['hour 0', 'hour 1'],
       data: [10, 20]
     };
     jest.spyOn(database, 'findOneByTimeRange').mockReturnValue(expectedResponse);
-    const response = await request(app).get('/api/articles/1/today');
+    const response = await request(app).get(`/api/articles/1/${TimeRange.TODAY}`);
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual(expectedResponse);
   });
@@ -27,7 +28,7 @@ describe('GET /api/articles/:id/:timeRange', () => {
   it('should return a 404 response when the article is not found', async () => {
     // Mock the database findOneByTimeRange method to return null
     jest.spyOn(database, 'findOneByTimeRange').mockReturnValue(null);
-    const response = await request(app).get('/api/articles/1/today');
+    const response = await request(app).get(`/api/articles/1/${TimeRange.TODAY}`);
     expect(response.statusCode).toBe(404);
   });
 
@@ -36,7 +37,7 @@ describe('GET /api/articles/:id/:timeRange', () => {
     jest.spyOn(database, 'findOneByTimeRange').mockImplementation(() => {
       throw new Error('Database error');
     });
-    const response = await request(app).get('/api/articles/1/today');
+    const response = await request(app).get(`/api/articles/1/${TimeRange.TODAY}`);
     expect(response.statusCode).toBe(500);
   });
 });

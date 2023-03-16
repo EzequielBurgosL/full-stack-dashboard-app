@@ -2,6 +2,7 @@ import React from 'react';
 import MuiAppBar from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { Select, SelectProps } from '../select';
 
 const StyledAppBar = styled(MuiAppBar)`
   padding: 12px 30px;
@@ -10,9 +11,10 @@ const StyledAppBar = styled(MuiAppBar)`
 
 export type AppBarProps = {
   title: string;
+  selectProps: SelectProps;
 };
 
-export const AppBar = ({ title }: AppBarProps) => {
+export const AppBar = ({ title, selectProps }: AppBarProps) => {
   return (
     <StyledAppBar>
       <Typography
@@ -22,8 +24,14 @@ export const AppBar = ({ title }: AppBarProps) => {
         noWrap
         sx={{ flexGrow: 1, alignSelf: 'center' }}
       >
-        { title }
+        {title}
       </Typography>
+      {selectProps && (
+        <Select
+          values={selectProps.values}
+          label={selectProps.label}
+        />
+      )}
     </StyledAppBar>
   );
 };
