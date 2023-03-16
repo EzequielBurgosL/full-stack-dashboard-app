@@ -2,8 +2,12 @@ import devDataset from "../dataset.json";
 import testDataset from "../fixtures/test-dataset";
 import { Article } from "../types/article";
 import { TimeRange } from "../types/timeRange";
-import { getArticleMonthTrafficPerHour, getArticleLastSevenDaysTrafficPerHour } from "./aggregation";
-import { getTodayTrafficPerHour, getYesterdayTrafficPerHour } from "./helpers";
+import {
+  getArticleMonthTrafficPerHour,
+  getArticleLastSevenDaysTrafficPerHour,
+  getArticleYesterdayTrafficPerHour,
+  getArticleTodayTrafficPerHour
+} from "./aggregation/article";
 
 const localDataset = process.env.NODE_ENV === 'test' ? testDataset : devDataset;
 
@@ -35,13 +39,13 @@ class Database {
     let traffic;
 
     if (timeRange === TimeRange.YESTERDAY) {
-      traffic = getYesterdayTrafficPerHour(article.daily_traffic);
+      traffic = getArticleYesterdayTrafficPerHour(article);
     } else if (timeRange === TimeRange.WEEK) {
-      traffic = getArticleLastSevenDaysTrafficPerHour(article.daily_traffic)
+      traffic = getArticleLastSevenDaysTrafficPerHour(article)
     } else if (timeRange === TimeRange.MONTH) {
-      traffic = getArticleMonthTrafficPerHour(article.daily_traffic);
+      traffic = getArticleMonthTrafficPerHour(article);
     } else {
-      traffic = getTodayTrafficPerHour(article.daily_traffic);
+      traffic = getArticleTodayTrafficPerHour(article);
     }
 
     labels = traffic?.map(item => `${item.hour}`.padStart(2, '0'));

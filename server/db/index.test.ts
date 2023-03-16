@@ -67,7 +67,6 @@ describe('Database', () => {
     it('should return processed article for month time range', () => {
       const articleId = 1;
       const result = database.findOneByTimeRange(articleId, TimeRange.MONTH);
-      console.log('result: ', result);
 
       expect(result).toEqual({
         id: 'f1cbfdfd-006f-4d77-9fbb-913758170a49',
