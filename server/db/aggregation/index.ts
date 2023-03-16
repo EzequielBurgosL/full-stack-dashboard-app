@@ -1,4 +1,6 @@
 import { MonthTraffic, Article } from "../../types/article";
+import { slicePrevSevenFromArray } from "../../utils/array";
+import * as dateUtils from "../../utils/dates";
 
 type TotalMonthTraffic = {
   hour: number;
@@ -29,6 +31,13 @@ export function getArticleMonthTrafficPerHour(monthTraffic: MonthTraffic): Total
       traffic: totalTraffic[hour]
     })
   });
+}
+
+export function getArticleLastSevenDaysTrafficPerHour(dailyTraffic: MonthTraffic) {
+  const totalMonthArticle = getArticleMonthTrafficPerHour(dailyTraffic);
+  const currentDayNumber = dateUtils.getTodayDayNumber();
+
+  return slicePrevSevenFromArray(totalMonthArticle, currentDayNumber);
 }
 
 export function totalArticlesMonthTrafficPerHour(articles: Article[]) {

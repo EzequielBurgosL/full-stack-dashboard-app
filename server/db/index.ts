@@ -2,7 +2,7 @@ import devDataset from "../dataset.json";
 import testDataset from "../fixtures/test-dataset";
 import { Article } from "../types/article";
 import { TimeRange } from "../types/timeRange";
-import { getArticleMonthTrafficPerHour } from "./aggregation";
+import { getArticleMonthTrafficPerHour, getArticleLastSevenDaysTrafficPerHour } from "./aggregation";
 import { getTodayTrafficPerHour, getYesterdayTrafficPerHour } from "./helpers";
 
 const localDataset = process.env.NODE_ENV === 'test' ? testDataset : devDataset;
@@ -37,7 +37,7 @@ class Database {
     if (timeRange === TimeRange.YESTERDAY) {
       traffic = getYesterdayTrafficPerHour(article.daily_traffic);
     } else if (timeRange === TimeRange.WEEK) {
-      return article;
+      traffic = getArticleLastSevenDaysTrafficPerHour(article.daily_traffic)
     } else if (timeRange === TimeRange.MONTH) {
       traffic = getArticleMonthTrafficPerHour(article.daily_traffic);
     } else {
