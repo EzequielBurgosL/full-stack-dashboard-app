@@ -1,13 +1,13 @@
-import devDataset from "../dataset.json";
-import testDataset from "../fixtures/test-dataset";
-import { Article } from "../types/article";
-import { TimeRange } from "../types/timeRange";
+import devDataset from '../dataset.json';
+import testDataset from '../fixtures/test-dataset';
+import { Article } from '../types/article';
+import { TimeRange } from '../types/timeRange';
 import {
   getArticleMonthTrafficPerHour,
   getArticleLastSevenDaysTrafficPerHour,
   getArticleYesterdayTrafficPerHour,
   getArticleTodayTrafficPerHour
-} from "./aggregation/article";
+} from './filter/article';
 
 const localDataset = process.env.NODE_ENV === 'test' ? testDataset : devDataset;
 

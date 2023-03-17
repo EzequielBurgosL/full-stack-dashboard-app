@@ -1,12 +1,12 @@
-import { Article } from "../../types/article";
-import { TimeRange } from "../../types/timeRange";
+import { Article } from '../../types/article';
+import { TimeRange } from '../../types/timeRange';
 import {
   getArticleLastSevenDaysTrafficPerHour,
   getArticleMonthTrafficPerHour,
   getArticleTodayTrafficPerHour,
   getArticleYesterdayTrafficPerHour,
   TotalTraffic
-} from "./article";
+} from '../filter/article';
 
 const getArticleTraffic = {
   [TimeRange.TODAY]: getArticleTodayTrafficPerHour,

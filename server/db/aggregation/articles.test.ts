@@ -1,11 +1,11 @@
-import testDataset from "../../fixtures/test-dataset";
-import { totalArticlesTrafficPerHour } from "./articles";
+import testDataset from '../../fixtures/test-dataset';
+import { totalArticlesTrafficPerHour } from './articles';
 import * as dateUtils from '../../utils/dates';
-import { TimeRange } from "../../types/timeRange";
+import { TimeRange } from '../../types/timeRange';
 
-describe("totalArticlesTrafficPerHour", () => {
+describe('totalArticlesTrafficPerHour', () => {
   describe('given an empty array', () => {
-    it("should return an empty array", () => {
+    it('should return an empty array', () => {
       expect(totalArticlesTrafficPerHour([], TimeRange.MONTH)).toEqual([]);
     });
   });

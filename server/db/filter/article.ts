@@ -34,7 +34,7 @@ export function getArticleLastSevenDaysTrafficPerHour(article: Article): TotalTr
   const currentDayNumber = dateUtils.getTodayDayNumber();
 
   return slicePrevSevenFromArray(totalMonthArticle, currentDayNumber);
-}
+};
 
 export function getArticleMonthTrafficPerHour(article: Article): TotalTraffic {
   if (!article) return [];
@@ -62,4 +62,4 @@ export function getArticleMonthTrafficPerHour(article: Article): TotalTraffic {
       traffic: totalTraffic[hour]
     })
   });
-}
+};

@@ -1,6 +1,6 @@
 import database from '.';
 import { TimeRange } from '../types/timeRange';
-import * as dateUtils from "../utils/dates";
+import * as dateUtils from '../utils/dates';
 
 describe('Database', () => {
   describe('findOneByTimeRange', () => {
