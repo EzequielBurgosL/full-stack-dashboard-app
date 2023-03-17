@@ -3,13 +3,18 @@ import { TimeRange } from "../../types/timeRange";
 import { slicePrevSevenFromArray } from "../../utils/array";
 import * as dateUtils from "../../utils/dates";
 
-export type TotalTraffic = {
+export type TotalHourTraffic = {
   hour: number;
   traffic: number;
 }[];
 
+export type TotalDayTraffic = {
+  day: number;
+  traffic: number;
+};
+
 type GetArticleTrafficType = {
-  [key in TimeRange]: (article: Article) => TotalTraffic;
+  [key in TimeRange]: (article: Article) => TotalHourTraffic;
 };
 
 export const getArticleTraffic: GetArticleTrafficType = {
@@ -19,7 +24,7 @@ export const getArticleTraffic: GetArticleTrafficType = {
   [TimeRange.MONTH]: getArticleMonthTrafficPerHour
 };
 
-export function getArticleTodayTrafficPerHour(article: Article): TotalTraffic {
+export function getArticleTodayTrafficPerHour(article: Article): TotalHourTraffic {
   if (!article) return [];
 
   const currentDayNumber = dateUtils.getTodayDayNumber();
@@ -29,7 +34,7 @@ export function getArticleTodayTrafficPerHour(article: Article): TotalTraffic {
   return [...currentDayHourlyTraffic];
 };
 
-export function getArticleYesterdayTrafficPerHour(article: Article): TotalTraffic {
+export function getArticleYesterdayTrafficPerHour(article: Article): TotalHourTraffic {
   if (!article) return [];
 
   const currentDayNumber = dateUtils.getYesterdayDayNumber();
@@ -39,7 +44,7 @@ export function getArticleYesterdayTrafficPerHour(article: Article): TotalTraffi
   return [...currentDayHourlyTraffic];
 };
 
-export function getArticleLastSevenDaysTrafficPerHour(article: Article): TotalTraffic {
+export function getArticleLastSevenDaysTrafficPerHour(article: Article): TotalHourTraffic {
   if (!article) return [];
 
   const totalMonthArticle = getArticleMonthTrafficPerHour(article);
@@ -48,7 +53,7 @@ export function getArticleLastSevenDaysTrafficPerHour(article: Article): TotalTr
   return slicePrevSevenFromArray(totalMonthArticle, currentDayNumber);
 };
 
-export function getArticleMonthTrafficPerHour(article: Article): TotalTraffic {
+export function getArticleMonthTrafficPerHour(article: Article): TotalHourTraffic {
   if (!article) return [];
 
   const totalTraffic: { [hour: number]: number } = {};

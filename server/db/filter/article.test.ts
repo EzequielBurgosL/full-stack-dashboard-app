@@ -9,30 +9,6 @@ import * as dateUtils from '../../utils/dates';
 
 describe("db aggregation - article", () => {
   const firstArticle = testDataset.traffic_data[0];
-
-  describe("getArticleMonthTrafficPerHour", () => {
-    describe('given an empty array', () => {
-      it("should return an empty array given an empty array", () => {
-        const wrongInput = null as unknown as Article;
-        expect(getArticleMonthTrafficPerHour(wrongInput)).toEqual([]);
-      });
-    });
-  
-    describe('given an array of ONE DAY with MULTIPLE HOURS of traffic', () => {
-      it("should return an array with one aggregated object", () => {  
-        expect(getArticleMonthTrafficPerHour(firstArticle)).toEqual([
-          {
-            hour: 0,
-            traffic: 30
-          },
-          {
-            hour: 1,
-            traffic: 40
-          }
-        ]);
-      });
-    });
-  });
   
   describe('getArticleTodayTrafficPerHour', () => {
     it('should return an empty array on wrong input', () => {
@@ -81,6 +57,30 @@ describe("db aggregation - article", () => {
           traffic: 15
         }
       ]);
+    });
+  });
+
+  describe("getArticleMonthTrafficPerHour", () => {
+    describe('given an empty array', () => {
+      it("should return an empty array given an empty array", () => {
+        const wrongInput = null as unknown as Article;
+        expect(getArticleMonthTrafficPerHour(wrongInput)).toEqual([]);
+      });
+    });
+  
+    describe('given an array of ONE DAY with MULTIPLE HOURS of traffic', () => {
+      it("should return an array with one aggregated object", () => {  
+        expect(getArticleMonthTrafficPerHour(firstArticle)).toEqual([
+          {
+            hour: 0,
+            traffic: 30
+          },
+          {
+            hour: 1,
+            traffic: 40
+          }
+        ]);
+      });
     });
   });
 });

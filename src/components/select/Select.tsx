@@ -27,7 +27,7 @@ export function Select({ values, label }: SelectProps) {
         id="simple-select-label"
         style={{ color: 'white' }}
       >
-        {label}
+        {!value && label}
       </InputLabel>
       {values.length && (
         <MuiSelect

@@ -9,3 +9,9 @@ export async function getDetail(id: string, timeRange: string = TimeRange.TODAY)
 
   return response;
 }
+
+export async function getMain(timeRange: string = TimeRange.TODAY) {
+  const response: AxiosResponse = await axios.get(`${BASE_PATH}/${BASE_ENDPOINT}/${timeRange}`);
+
+  return response;
+}

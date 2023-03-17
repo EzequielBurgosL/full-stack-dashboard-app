@@ -17,24 +17,29 @@ export function DetailPage({ id = '', timeRange = '' }) {
     getDetail(_id, _timeRange).then((response) => {
       if (response.data) setData(response.data);
     });
+    // eslint-disable-next-line
   }, [selectedValue]);
 
   return (
     <BaseLayout>
-      {data && <Article
-        author={data.author}
-        image={data.image_url}
-        traffic={123}
-        url={data.url}
-      />}
-      {data &&
-      <Card sx={{ boxShadow: 'rgb(0 0 0 / 20%) 1px 1px 2px', padding: '10px' }}>
-        <Chart
-          data={data.data}
-          labels={data.labels}
-          title={'traffic'}
+      {data && (
+        <Article
+          id={data.id}
+          author={data.author}
+          image={data.image_url}
+          traffic={data.totalTraffic}
+          url={data.url}
         />
-      </Card>}
+      )}
+      {data && (
+        <Card sx={{ boxShadow: 'rgb(0 0 0 / 20%) 1px 1px 2px', padding: '10px' }}>
+          <Chart
+            data={data.data}
+            labels={data.labels}
+            title={'traffic'}
+          />
+        </Card>
+      )}
     </BaseLayout>
   )
 }

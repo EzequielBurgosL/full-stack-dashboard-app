@@ -2,8 +2,8 @@ import devDataset from '../dataset.json';
 import testDataset from '../fixtures/test-dataset';
 import { Article } from '../types/article';
 import { TimeRange } from '../types/timeRange';
-import { totalArticlesTrafficPerHour } from './aggregation/articles';
-import { getArticleTraffic, TotalTraffic } from './filter/article';
+import { totalArticleMonthTraffic, totalArticlesTrafficPerHour, totalArticleYesterdayTraffic, totalArticleTodayTraffic } from './aggregation/articles';
+import { getArticleTraffic, TotalHourTraffic } from './filter/article';
 import { isValidId, isValidTimeRange } from '../utils/validation';
 
 const localDataset = process.env.NODE_ENV === 'test' ? testDataset : devDataset;
@@ -16,17 +16,24 @@ type ProcessedArticle = Partial<Article> & {
 }
 
 class Database {
-  private articles: Article[] = localDataset.traffic_data;
+  private articles: Article[] = localDataset.traffic_data || [];
 
   findByTimeRange(timeRange: TimeRange) {
     if (!isValidTimeRange(timeRange)) return null;
 
     const traffic = totalArticlesTrafficPerHour(this.articles, timeRange);
+    const articles: Partial<Article>[] = this.articles.map((article) => ({
+      id: article.id,
+      url: article.url,
+      author: article.author,
+      image_url: article.image_url,
+    }));
 
     return {
+      articles,
       data: this.getData(traffic),
       labels: this.getLabels(traffic),
-      totalTraffic: this.getTotalTraffic(traffic)
+      // totalTraffic: this.getTotalTraffic(traffic)
     };
   }
 
@@ -47,23 +54,28 @@ class Database {
       url: article.url,
       author: article.author,
       image_url: article.image_url,
-      timeRange,
       data: this.getData(traffic),
       labels: this.getLabels(traffic),
-      totalTraffic: this.getTotalTraffic(traffic)
+      totalTraffic: this.getTotalTraffic(article, timeRange)
     };
   }
 
-  private getLabels(traffic: TotalTraffic) {
+  private getLabels(traffic: TotalHourTraffic) {
     return traffic?.map(item => `${item.hour}`.padStart(2, '0'));
   }
 
-  private getData(traffic: TotalTraffic) {
+  private getData(traffic: TotalHourTraffic) {
     return traffic?.map(item => item.traffic);
   }
 
-  private getTotalTraffic(traffic: TotalTraffic){
-    return traffic?.reduce((prev, curr) => prev += curr.traffic, 0);
+  private getTotalTraffic(article: Article, timeRange: TimeRange) {
+    if (timeRange === TimeRange.MONTH || timeRange === TimeRange.WEEK) {
+      return totalArticleMonthTraffic(article, timeRange === TimeRange.WEEK);
+    } else if (timeRange === TimeRange.YESTERDAY) {
+      return totalArticleYesterdayTraffic(article);
+    } else {
+      return totalArticleTodayTraffic(article);
+    }
   }
 }
 

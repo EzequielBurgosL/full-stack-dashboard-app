@@ -17,11 +17,12 @@ export type ArticleProps = {
   url: string;
   image: string;
   traffic: number;
+  id: string;
 };
 
-export const Article = ({ author, url, image, traffic }: ArticleProps) => {
+export const Article = ({ author, url, image, traffic, id }: ArticleProps) => {
   return (
-    <Card sx={{ display: 'flex', mb: 1, paddingRight: '6px', boxShadow: 'rgb(0 0 0 / 20%) 1px 1px 2px' }} variant='outlined'>
+    <Card key={id} sx={{ display: 'flex', mb: 1, paddingRight: '6px', boxShadow: 'rgb(0 0 0 / 20%) 1px 1px 2px' }} variant='outlined'>
       <CardMedia
         component="img"
         sx={{ width: 151 }}

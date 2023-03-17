@@ -40,7 +40,6 @@ describe('Database', () => {
         url: 'https://www.example.com/article1',
         author: 'John',
         image_url: 'https://picsum.photos/600/400?buster=0.19513832527942854',
-        timeRange: TimeRange.TODAY,
         data: [ 10, 15 ],
         labels: [ '00', '01' ],
         totalTraffic: 25
@@ -57,7 +56,6 @@ describe('Database', () => {
         url: 'https://www.example.com/article1',
         author: 'John',
         image_url: 'https://picsum.photos/600/400?buster=0.19513832527942854',
-        timeRange: TimeRange.YESTERDAY,
         data: [ 10, 15 ],
         labels: [ '00', '01' ],
         totalTraffic: 25
@@ -73,7 +71,6 @@ describe('Database', () => {
         url: 'https://www.example.com/article1',
         author: 'John',
         image_url: 'https://picsum.photos/600/400?buster=0.19513832527942854',
-        timeRange: TimeRange.MONTH,
         data: [ 30, 40 ],
         labels: [ '00', '01' ],
         totalTraffic: 70
@@ -88,11 +85,5 @@ describe('Database', () => {
 
       expect(result).toBeNull();
     });
-
-    // it('should return something', () => {
-    //   const result = database.findByTimeRange(TimeRange.TODAY);
-
-    //   console.log('result', result);
-    // })
   });
 });
