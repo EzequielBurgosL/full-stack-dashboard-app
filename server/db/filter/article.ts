@@ -1,4 +1,5 @@
 import { Article } from "../../types/article";
+import { TimeRange } from "../../types/timeRange";
 import { slicePrevSevenFromArray } from "../../utils/array";
 import * as dateUtils from "../../utils/dates";
 
@@ -6,6 +7,17 @@ export type TotalTraffic = {
   hour: number;
   traffic: number;
 }[];
+
+type GetArticleTrafficType = {
+  [key in TimeRange]: (article: Article) => TotalTraffic;
+};
+
+export const getArticleTraffic: GetArticleTrafficType = {
+  [TimeRange.TODAY]: getArticleTodayTrafficPerHour,
+  [TimeRange.YESTERDAY]: getArticleYesterdayTrafficPerHour,
+  [TimeRange.WEEK]: getArticleLastSevenDaysTrafficPerHour,
+  [TimeRange.MONTH]: getArticleMonthTrafficPerHour
+};
 
 export function getArticleTodayTrafficPerHour(article: Article): TotalTraffic {
   if (!article) return [];

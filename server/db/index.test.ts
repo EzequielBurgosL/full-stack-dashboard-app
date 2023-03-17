@@ -80,4 +80,19 @@ describe('Database', () => {
       });
     });
   });
+
+  describe('findByTimeRange', () => {
+    it('should return null if time range is not valid', () => {
+      const invalidTimeRange = 'invalid-timeRange' as unknown as TimeRange;
+      const result = database.findByTimeRange(invalidTimeRange);
+
+      expect(result).toBeNull();
+    });
+
+    // it('should return something', () => {
+    //   const result = database.findByTimeRange(TimeRange.TODAY);
+
+    //   console.log('result', result);
+    // })
+  });
 });

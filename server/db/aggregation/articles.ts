@@ -1,19 +1,9 @@
 import { Article } from '../../types/article';
 import { TimeRange } from '../../types/timeRange';
 import {
-  getArticleLastSevenDaysTrafficPerHour,
-  getArticleMonthTrafficPerHour,
-  getArticleTodayTrafficPerHour,
-  getArticleYesterdayTrafficPerHour,
+  getArticleTraffic,
   TotalTraffic
 } from '../filter/article';
-
-const getArticleTraffic = {
-  [TimeRange.TODAY]: getArticleTodayTrafficPerHour,
-  [TimeRange.YESTERDAY]: getArticleYesterdayTrafficPerHour,
-  [TimeRange.WEEK]: getArticleLastSevenDaysTrafficPerHour,
-  [TimeRange.MONTH]: getArticleMonthTrafficPerHour
-};
 
 export function totalArticlesTrafficPerHour(articles: Article[], timeRange: TimeRange) {
   if (!articles || !articles?.length) return [];

@@ -12,8 +12,8 @@ function App() {
       <TimeRangeProvider>
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<MainPage />}></Route>
-            <Route path='/detail/:id/:timeRange' element={<DetailPage />}></Route>
+            <Route path='/detail/:timeRange' element={<MainPage />}></Route>
+            <Route path='/detail/:timeRange/:id' element={<DetailPage />}></Route>
           </Routes>
         </BrowserRouter>
       </TimeRangeProvider>
