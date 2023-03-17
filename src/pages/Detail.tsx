@@ -4,21 +4,26 @@ import { Article, BaseLayout, Chart } from "../components";
 import { getDetail } from "../api";
 import { Card } from '@mui/material';
 import { TimeRangeContext, TimeRangeContextType } from '../context/timeRange';
+import { TimeRange } from '../types';
 
 export function DetailPage({ id = '', timeRange = '' }) {
   const params = useParams<{ id: string, timeRange: string }>();
   const [data, setData] = useState<any>({});
   const { selectedValue } = useContext(TimeRangeContext) as TimeRangeContextType;
+  const _timeRange = selectedValue || timeRange || params.timeRange;
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const _id = id || params.id || '';
-    const _timeRange = selectedValue || timeRange || params.timeRange;
 
     getDetail(_id, _timeRange).then((response) => {
       if (response.data) setData(response.data);
     });
     // eslint-disable-next-line
   }, [selectedValue]);
+
+  const isDay = _timeRange === TimeRange.MONTH || _timeRange === TimeRange.WEEK;
+  const chartTitle = `Traffic ${isDay ? '/ day' : '/ hour'}`;
 
   return (
     <BaseLayout>
@@ -36,7 +41,7 @@ export function DetailPage({ id = '', timeRange = '' }) {
           <Chart
             data={data.data}
             labels={data.labels}
-            title={'traffic'}
+            title={chartTitle}
           />
         </Card>
       )}

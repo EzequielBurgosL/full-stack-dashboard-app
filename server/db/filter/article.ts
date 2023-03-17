@@ -3,28 +3,23 @@ import { TimeRange } from "../../types/timeRange";
 import { slicePrevSevenFromArray } from "../../utils/array";
 import * as dateUtils from "../../utils/dates";
 
-export type TotalHourTraffic = {
-  hour: number;
+export type TotalTraffic = {
+  [key: string]: number;
   traffic: number;
 }[];
 
-export type TotalDayTraffic = {
-  day: number;
-  traffic: number;
-};
-
 type GetArticleTrafficType = {
-  [key in TimeRange]: (article: Article) => TotalHourTraffic;
+  [key in TimeRange]: (article: Article) => TotalTraffic;
 };
 
 export const getArticleTraffic: GetArticleTrafficType = {
   [TimeRange.TODAY]: getArticleTodayTrafficPerHour,
   [TimeRange.YESTERDAY]: getArticleYesterdayTrafficPerHour,
-  [TimeRange.WEEK]: getArticleLastSevenDaysTrafficPerHour,
-  [TimeRange.MONTH]: getArticleMonthTrafficPerHour
+  [TimeRange.WEEK]: getArticleLastSevenDaysTrafficPerDay,
+  [TimeRange.MONTH]: getArticleMonthTrafficPerDay
 };
 
-export function getArticleTodayTrafficPerHour(article: Article): TotalHourTraffic {
+export function getArticleTodayTrafficPerHour(article: Article): TotalTraffic {
   if (!article) return [];
 
   const currentDayNumber = dateUtils.getTodayDayNumber();
@@ -34,7 +29,7 @@ export function getArticleTodayTrafficPerHour(article: Article): TotalHourTraffi
   return [...currentDayHourlyTraffic];
 };
 
-export function getArticleYesterdayTrafficPerHour(article: Article): TotalHourTraffic {
+export function getArticleYesterdayTrafficPerHour(article: Article): TotalTraffic {
   if (!article) return [];
 
   const currentDayNumber = dateUtils.getYesterdayDayNumber();
@@ -44,39 +39,22 @@ export function getArticleYesterdayTrafficPerHour(article: Article): TotalHourTr
   return [...currentDayHourlyTraffic];
 };
 
-export function getArticleLastSevenDaysTrafficPerHour(article: Article): TotalHourTraffic {
+export function getArticleLastSevenDaysTrafficPerDay(article: Article): TotalTraffic {
   if (!article) return [];
 
-  const totalMonthArticle = getArticleMonthTrafficPerHour(article);
+  const totalMonthArticle = getArticleMonthTrafficPerDay(article);
   const currentDayNumber = dateUtils.getTodayDayNumber();
 
   return slicePrevSevenFromArray(totalMonthArticle, currentDayNumber);
 };
 
-export function getArticleMonthTrafficPerHour(article: Article): TotalHourTraffic {
+export function getArticleMonthTrafficPerDay(article: Article): TotalTraffic {
   if (!article) return [];
 
-  const totalTraffic: { [hour: number]: number } = {};
-
-  article?.daily_traffic?.forEach((dayTraffic) => {
-    dayTraffic?.hourly_traffic?.forEach((hourTraffic) => {
-      const hour = hourTraffic.hour;
-      const traffic = hourTraffic.traffic;
-
-      if (totalTraffic[hour]) {
-        totalTraffic[hour] += traffic;
-      } else {
-        totalTraffic[hour] = traffic;
-      }
-    });
-  });
-
-  return Object.keys(totalTraffic).map((hourStr) => {
-    const hour = parseInt(hourStr);
-
-    return ({
-      hour: hour,
-      traffic: totalTraffic[hour]
-    })
+  return article?.daily_traffic?.map((dayTraffic) => {
+    return {
+      day: dayTraffic.day,
+      traffic: dayTraffic?.hourly_traffic?.reduce((curr, acc) => curr += acc.traffic, 0)
+    }
   });
 };

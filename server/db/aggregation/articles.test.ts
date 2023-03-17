@@ -1,6 +1,6 @@
 import testDataset from '../../fixtures/test-dataset';
 import {
-  totalArticlesTrafficPerHour,
+  getArticlesTraffic,
   totalArticleTodayTraffic,
   totalArticleMonthTraffic
 } from './articles';
@@ -10,10 +10,10 @@ import { TimeRange } from '../../types/timeRange';
 const articles = testDataset.traffic_data;
 const firstArticle = articles[0];
 
-describe('totalArticlesTrafficPerHour', () => {
+describe('getArticlesTraffic', () => {
   describe('given an empty array', () => {
     it('should return an empty array', () => {
-      expect(totalArticlesTrafficPerHour([], TimeRange.TODAY)).toEqual([]);
+      expect(getArticlesTraffic([], TimeRange.TODAY)).toEqual([]);
     });
   });
 
@@ -22,7 +22,7 @@ describe('totalArticlesTrafficPerHour', () => {
       it('should return the aggregated traffic per hour of that day', () => {
         jest.spyOn(dateUtils, 'getTodayDayNumber').mockImplementation(() => 1);
 
-        const result = totalArticlesTrafficPerHour(articles, TimeRange.TODAY);
+        const result = getArticlesTraffic(articles, TimeRange.TODAY);
 
         expect(result).toEqual([
           {
@@ -41,7 +41,7 @@ describe('totalArticlesTrafficPerHour', () => {
       it('should return the aggregated traffic per hour of that day', () => {
         jest.spyOn(dateUtils, 'getYesterdayDayNumber').mockImplementation(() => 1);
         
-        const result = totalArticlesTrafficPerHour(articles, TimeRange.YESTERDAY);
+        const result = getArticlesTraffic(articles, TimeRange.YESTERDAY);
         
         expect(result).toEqual([
           {
@@ -57,36 +57,36 @@ describe('totalArticlesTrafficPerHour', () => {
     });
 
     describe('when the TimeRange is WEEK', () => {
-      it('should return the aggregated traffic per hour of that week', () => {
+      it('should return the aggregated traffic per day of that week', () => {
         jest.spyOn(dateUtils, 'getTodayDayNumber').mockImplementation(() => 2);
         
-        const result = totalArticlesTrafficPerHour(articles, TimeRange.WEEK);
+        const result = getArticlesTraffic(articles, TimeRange.WEEK);
         
         expect(result).toEqual([
           {
-            hour: 0,
-            traffic: 100
+            day: 1,
+            traffic: 90
           },
           {
-            hour: 1,
-            traffic: 120
+            day: 2,
+            traffic: 130
           }
         ])
       })
     });
 
     describe('when the TimeRange is MONTH', () => {
-      it('should return the aggregated traffic per hour of that month', () => {
-        const result = totalArticlesTrafficPerHour(articles, TimeRange.MONTH);
+      it('should return the aggregated traffic per day of that month', () => {
+        const result = getArticlesTraffic(articles, TimeRange.MONTH);
 
         expect(result).toEqual([
           {
-            hour: 0,
-            traffic: 100
+            day: 1,
+            traffic: 90
           },
           {
-            hour: 1,
-            traffic: 120
+            day: 2,
+            traffic: 130
           }
         ])
       })

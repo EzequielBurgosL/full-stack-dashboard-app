@@ -1,7 +1,7 @@
 import testDataset from '../../fixtures/test-dataset';
 import { Article } from '../../types/article';
 import {
-  getArticleMonthTrafficPerHour,
+  getArticleMonthTrafficPerDay,
   getArticleTodayTrafficPerHour,
   getArticleYesterdayTrafficPerHour
 } from './article';
@@ -60,24 +60,24 @@ describe("db aggregation - article", () => {
     });
   });
 
-  describe("getArticleMonthTrafficPerHour", () => {
+  describe("getArticleMonthTrafficPerDay", () => {
     describe('given an empty array', () => {
       it("should return an empty array given an empty array", () => {
         const wrongInput = null as unknown as Article;
-        expect(getArticleMonthTrafficPerHour(wrongInput)).toEqual([]);
+        expect(getArticleMonthTrafficPerDay(wrongInput)).toEqual([]);
       });
     });
   
-    describe('given an array of ONE DAY with MULTIPLE HOURS of traffic', () => {
+    describe('given an array of daily traffic', () => {
       it("should return an array with one aggregated object", () => {  
-        expect(getArticleMonthTrafficPerHour(firstArticle)).toEqual([
+        expect(getArticleMonthTrafficPerDay(firstArticle)).toEqual([
           {
-            hour: 0,
-            traffic: 30
+            day: 1,
+            traffic: 25
           },
           {
-            hour: 1,
-            traffic: 40
+            day: 2,
+            traffic: 45
           }
         ]);
       });

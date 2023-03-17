@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
+import MuiMenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import MuiSelect, { SelectChangeEvent } from '@mui/material/Select';
 import { TimeRangeContext, TimeRangeContextType } from '../../context/timeRange';
@@ -47,7 +47,7 @@ export function Select({ values, label }: SelectProps) {
           }}
         >
           {values.map(({ id, text, value }: MenuItem) => (
-            <MenuItem key={id} value={value}>{text}</MenuItem>
+            <MuiMenuItem key={id} value={value}>{text}</MuiMenuItem>
           ))}
         </MuiSelect>
       )}

@@ -4,20 +4,23 @@ import { Article, BaseLayout, Chart } from "../components";
 import { getMain } from "../api";
 import { Card } from '@mui/material';
 import { TimeRangeContext, TimeRangeContextType } from '../context/timeRange';
+import { TimeRange } from '../types';
 
 export function MainPage({ timeRange = '' }) {
   const params = useParams<{ timeRange: string }>();
   const [data, setData] = useState<any>({});
   const { selectedValue } = useContext(TimeRangeContext) as TimeRangeContextType;
+  const _timeRange = selectedValue || timeRange || params.timeRange;
 
   useEffect(() => {
-    const _timeRange = selectedValue || timeRange || params.timeRange;
-
     getMain(_timeRange).then((response) => {
       if (response.data) setData(response.data);
     });
     // eslint-disable-next-line
   }, [selectedValue]);
+
+  const isDay = _timeRange === TimeRange.MONTH || _timeRange === TimeRange.WEEK;
+  const chartTitle = `Traffic ${isDay ? '/ day' : '/ hour'}`;
 
   return (
     <BaseLayout>
@@ -26,13 +29,13 @@ export function MainPage({ timeRange = '' }) {
           <Chart
             data={data.data}
             labels={data.labels}
-            title={'traffic'}
+            title={chartTitle}
           />
         </Card>
       )}
       {data && data.articles?.map((article: any, index: number) => {
         return (
-          <Link to={`/articles/${selectedValue || timeRange || params.timeRange}/${index + 1}`} style={{ textDecoration: 'none' }}>
+          <Link to={`/articles/${_timeRange}/${index + 1}`} style={{ textDecoration: 'none' }}>
             <Article
               id={article.id}
               author={article.author}

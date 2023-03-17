@@ -2,34 +2,36 @@ import { Article } from '../../types/article';
 import { TimeRange } from '../../types/timeRange';
 import {
   getArticleTraffic,
-  TotalHourTraffic
+  TotalTraffic
 } from '../filter/article';
 import * as dateUtils from "../../utils/dates";
 import { slicePrevSevenFromArray } from '../../utils/array';
 
-export function totalArticlesTrafficPerHour(articles: Article[], timeRange: TimeRange) {
+export function getArticlesTraffic(articles: Article[], timeRange: TimeRange) {
   if (!articles || !articles?.length) return [];
 
-  let articlesTrafficPerHour: TotalHourTraffic = [];
+  let articlesTraffic: TotalTraffic = [];
+  const time = timeRange === TimeRange.MONTH || timeRange === TimeRange.WEEK ?
+    'day': 'hour';
 
   articles.forEach((article) => {
-    const articleTrafficPerHour = getArticleTraffic[timeRange](article);
+    const articleTraffic = getArticleTraffic[timeRange](article);
 
-    articleTrafficPerHour.forEach((item, index) => {
-      if (!articlesTrafficPerHour[index]) {
+    articleTraffic.forEach((item, index) => {
+      if (!articlesTraffic[index]) {
         const initialValue = {
-          hour: item.hour,
+          [time]: item[time],
           traffic: item.traffic
         };
 
-        articlesTrafficPerHour[index] = initialValue;
+        articlesTraffic[index] = initialValue;
       } else {
-        articlesTrafficPerHour[index].traffic += item.traffic;
+        articlesTraffic[index].traffic += item.traffic;
       }
     });
   });
 
-  return articlesTrafficPerHour;
+  return articlesTraffic;
 };
 
 export function totalArticleTodayTraffic(article: Article): number {

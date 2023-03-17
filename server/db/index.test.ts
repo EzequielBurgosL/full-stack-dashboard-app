@@ -71,8 +71,8 @@ describe('Database', () => {
         url: 'https://www.example.com/article1',
         author: 'John',
         image_url: 'https://picsum.photos/600/400?buster=0.19513832527942854',
-        data: [ 30, 40 ],
-        labels: [ '00', '01' ],
+        data: [ 25, 45 ],
+        labels: [ '01', '02' ],
         totalTraffic: 70
       });
     });
