@@ -1,38 +1,6 @@
 import { Article } from '../../types/article';
-import { TimeRange } from '../../types/timeRange';
-import {
-  getArticleTraffic,
-  TotalTraffic
-} from '../filter/article';
 import * as dateUtils from "../../utils/dates";
 import { slicePrevSevenFromArray } from '../../utils/array';
-
-export function getArticlesTraffic(articles: Article[], timeRange: TimeRange) {
-  if (!articles || !articles?.length) return [];
-
-  let articlesTraffic: TotalTraffic = [];
-  const time = timeRange === TimeRange.MONTH || timeRange === TimeRange.WEEK ?
-    'day': 'hour';
-
-  articles.forEach((article) => {
-    const articleTraffic = getArticleTraffic[timeRange](article);
-
-    articleTraffic.forEach((item, index) => {
-      if (!articlesTraffic[index]) {
-        const initialValue = {
-          [time]: item[time],
-          traffic: item.traffic
-        };
-
-        articlesTraffic[index] = initialValue;
-      } else {
-        articlesTraffic[index].traffic += item.traffic;
-      }
-    });
-  });
-
-  return articlesTraffic;
-};
 
 export function totalArticleTodayTraffic(article: Article): number {
   const currentDayNumber = dateUtils.getTodayDayNumber();

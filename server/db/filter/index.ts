@@ -58,3 +58,30 @@ export function getArticleMonthTrafficPerDay(article: Article): TotalTraffic {
     }
   });
 };
+
+export function getArticlesTraffic(articles: Article[], timeRange: TimeRange) {
+  if (!articles || !articles?.length) return [];
+
+  let articlesTraffic: TotalTraffic = [];
+  const time = timeRange === TimeRange.MONTH || timeRange === TimeRange.WEEK ?
+    'day': 'hour';
+
+  articles.forEach((article) => {
+    const articleTraffic = getArticleTraffic[timeRange](article);
+
+    articleTraffic.forEach((item, index) => {
+      if (!articlesTraffic[index]) {
+        const initialValue = {
+          [time]: item[time],
+          traffic: item.traffic
+        };
+
+        articlesTraffic[index] = initialValue;
+      } else {
+        articlesTraffic[index].traffic += item.traffic;
+      }
+    });
+  });
+
+  return articlesTraffic;
+};

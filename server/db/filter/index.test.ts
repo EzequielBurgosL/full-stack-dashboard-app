@@ -1,14 +1,90 @@
 import testDataset from '../../fixtures/test-dataset';
+import { Article } from '../../types/article';
 import {
+  getArticleMonthTrafficPerDay,
   getArticlesTraffic,
-  totalArticleTodayTraffic,
-  totalArticleMonthTraffic
-} from './articles';
+  getArticleTodayTrafficPerHour,
+  getArticleYesterdayTrafficPerHour
+} from '.';
 import * as dateUtils from '../../utils/dates';
 import { TimeRange } from '../../types/timeRange';
 
 const articles = testDataset.traffic_data;
 const firstArticle = articles[0];
+
+describe('getArticleTodayTrafficPerHour', () => {
+  it('should return an empty array on wrong input', () => {
+    const wrongInput = null as unknown as Article;
+    const result = getArticleTodayTrafficPerHour(wrongInput);
+
+    expect(result).toEqual([]);
+  });
+
+  it('should return an array of hourly traffic data', () => {
+    jest.spyOn(dateUtils, 'getTodayDayNumber').mockImplementation(() => 1);
+    const result = getArticleTodayTrafficPerHour(firstArticle);
+
+    expect(result).toEqual([
+      {
+        hour: 0,
+        traffic: 10
+      },
+      {
+        hour: 1,
+        traffic: 15
+      }
+    ]);
+  });
+});
+
+describe('getArticleYesterdayTrafficPerHour', () => {
+  it('should return an empty array on wrong input', () => {
+    const wrongInput = null as unknown as Article;
+    const result = getArticleYesterdayTrafficPerHour(wrongInput);
+
+    expect(result).toEqual([]);
+  });
+
+  it('should return an array of hourly traffic data', () => {
+    jest.spyOn(dateUtils, 'getYesterdayDayNumber').mockImplementation(() => 1);
+    const result = getArticleYesterdayTrafficPerHour(firstArticle);
+
+    expect(result).toEqual([
+      {
+        hour: 0,
+        traffic: 10
+      },
+      {
+        hour: 1,
+        traffic: 15
+      }
+    ]);
+  });
+});
+
+describe("getArticleMonthTrafficPerDay", () => {
+  describe('given an empty array', () => {
+    it("should return an empty array given an empty array", () => {
+      const wrongInput = null as unknown as Article;
+      expect(getArticleMonthTrafficPerDay(wrongInput)).toEqual([]);
+    });
+  });
+
+  describe('given an array of daily traffic', () => {
+    it("should return an array with one aggregated object", () => {
+      expect(getArticleMonthTrafficPerDay(firstArticle)).toEqual([
+        {
+          day: 1,
+          traffic: 25
+        },
+        {
+          day: 2,
+          traffic: 45
+        }
+      ]);
+    });
+  });
+});
 
 describe('getArticlesTraffic', () => {
   describe('given an empty array', () => {
@@ -40,9 +116,9 @@ describe('getArticlesTraffic', () => {
     describe('when the TimeRange is YESTERDAY', () => {
       it('should return the aggregated traffic per hour of that day', () => {
         jest.spyOn(dateUtils, 'getYesterdayDayNumber').mockImplementation(() => 1);
-        
+
         const result = getArticlesTraffic(articles, TimeRange.YESTERDAY);
-        
+
         expect(result).toEqual([
           {
             hour: 0,
@@ -59,9 +135,9 @@ describe('getArticlesTraffic', () => {
     describe('when the TimeRange is WEEK', () => {
       it('should return the aggregated traffic per day of that week', () => {
         jest.spyOn(dateUtils, 'getTodayDayNumber').mockImplementation(() => 2);
-        
+
         const result = getArticlesTraffic(articles, TimeRange.WEEK);
-        
+
         expect(result).toEqual([
           {
             day: 1,
@@ -91,22 +167,5 @@ describe('getArticlesTraffic', () => {
         ])
       })
     })
-  });
-});
-
-describe('totalArticleTodayTraffic', () => {
-  it('should return an aggregated number', () => {
-    jest.spyOn(dateUtils, 'getTodayDayNumber').mockImplementation(() => 1);
-    const result = totalArticleTodayTraffic(firstArticle);
-
-    expect(result).toEqual(10 + 15);
-  });
-});
-
-describe('totalArticleMonthTraffic', () => {
-  it('should return an aggregated number', () => {
-    const result = totalArticleMonthTraffic(firstArticle);
-
-    expect(result).toEqual(10 + 15 + 20 + 25);
   });
 });

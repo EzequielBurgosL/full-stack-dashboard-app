@@ -4,11 +4,14 @@ import { Article } from '../types/article';
 import { TimeRange } from '../types/timeRange';
 import {
   totalArticleMonthTraffic,
-  getArticlesTraffic,
   totalArticleYesterdayTraffic,
   totalArticleTodayTraffic
-} from './aggregation/articles';
-import { getArticleTraffic, TotalTraffic } from './filter/article';
+} from './aggregation';
+import {
+  getArticleTraffic,
+  getArticlesTraffic,
+  TotalTraffic,
+} from './filter';
 import { isValidId, isValidTimeRange } from '../utils/validation';
 
 const localDataset = process.env.NODE_ENV === 'test' ? testDataset : devDataset;
