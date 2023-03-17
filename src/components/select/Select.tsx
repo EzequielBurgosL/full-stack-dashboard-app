@@ -13,8 +13,8 @@ export type SelectProps = {
 type MenuItem = { id: string; value: string; text: string; };
 
 export function Select({ values, label }: SelectProps) {
-  const [value, setValue] = useState('');
-  const { setSelectedValue } = useContext(TimeRangeContext) as TimeRangeContextType;
+  const { selectedValue, setSelectedValue } = useContext(TimeRangeContext) as TimeRangeContextType;
+  const [value, setValue] = useState(selectedValue || '');
 
   const handleChange = (event: SelectChangeEvent) => {
     setValue(event.target.value as string);

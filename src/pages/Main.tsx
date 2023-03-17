@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Article, BaseLayout, Chart } from "../components";
 import { getMain } from "../api";
 import { Card } from '@mui/material';
@@ -30,15 +30,17 @@ export function MainPage({ timeRange = '' }) {
           />
         </Card>
       )}
-      {data && data.articles?.map((article: any) => {        
+      {data && data.articles?.map((article: any, index: number) => {
         return (
-          <Article
-            id={article.id}
-            author={article.author}
-            image={article.image_url}
-            traffic={article.totalTraffic}
-            url={article.url}
-          />
+          <Link to={`/articles/${selectedValue || timeRange || params.timeRange}/${index + 1}`} style={{ textDecoration: 'none' }}>
+            <Article
+              id={article.id}
+              author={article.author}
+              image={article.image_url}
+              traffic={article.totalTraffic}
+              url={article.url}
+            />
+          </Link>
         )
       })}
     </BaseLayout>

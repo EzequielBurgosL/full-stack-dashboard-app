@@ -1,6 +1,6 @@
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { DetailPage, MainPage } from './pages';
 import { TimeRangeProvider } from './context/timeRange';
 
@@ -12,8 +12,9 @@ function App() {
       <TimeRangeProvider>
         <BrowserRouter>
           <Routes>
-            <Route path='/detail/:timeRange' element={<MainPage />}></Route>
-            <Route path='/detail/:timeRange/:id' element={<DetailPage />}></Route>
+            <Route path='/articles/:timeRange' element={<MainPage />}></Route>
+            <Route path='/articles/:timeRange/:id' element={<DetailPage />}></Route>
+            <Route path='*' element={<Navigate to='/articles/today' />} />
           </Routes>
         </BrowserRouter>
       </TimeRangeProvider>
