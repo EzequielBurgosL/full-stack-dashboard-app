@@ -27,13 +27,13 @@ class Database {
       url: article.url,
       author: article.author,
       image_url: article.image_url,
+      totalTraffic: this.getTotalTraffic(article, timeRange)
     }));
 
     return {
       articles,
       data: this.getData(traffic),
-      labels: this.getLabels(traffic),
-      // totalTraffic: this.getTotalTraffic(traffic)
+      labels: this.getLabels(traffic)
     };
   }
 

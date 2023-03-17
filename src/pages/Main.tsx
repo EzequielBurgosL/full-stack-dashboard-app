@@ -36,7 +36,7 @@ export function MainPage({ timeRange = '' }) {
             id={article.id}
             author={article.author}
             image={article.image_url}
-            traffic={123}
+            traffic={article.totalTraffic}
             url={article.url}
           />
         )
