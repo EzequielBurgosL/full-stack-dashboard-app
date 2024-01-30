@@ -1,4 +1,4 @@
-# Fullstack test
+# Fullstack Dashboard Application
 
 The assessment consists in building a dashboard for analyzing publishers site traffic insights.
 
